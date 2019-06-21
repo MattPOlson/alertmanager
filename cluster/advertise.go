@@ -20,7 +20,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-type getPrivateIPFunc func() (string,string, error)
+type getPrivateIPFunc func() (string, string, error)
 
 // This is overridden in unit tests to mock the sockaddr.GetPrivateIP function.
 var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
