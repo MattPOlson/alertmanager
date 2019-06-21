@@ -20,7 +20,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-type getPrivateIPFunc func() (string, error)
+type getPrivateIPFunc func() (string,string, error)
 
 // This is overridden in unit tests to mock the sockaddr.GetPrivateIP function.
 var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
@@ -44,7 +44,7 @@ func calculateAdvertiseAddress(bindAddr, advertiseAddr string) (net.IP, error) {
 	}
 
 	if isAny(bindAddr) {
-		privateIP, err := getPrivateAddress()
+		privateIP, thorwaway, err := getPrivateAddress()
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get private IP")
 		}
