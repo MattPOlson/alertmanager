@@ -45,7 +45,7 @@ func calculateAdvertiseAddress(bindAddr, advertiseAddr string) (net.IP, error) {
 	}
 
 	if isAny(bindAddr) {
-		privateIP, thowaway, err := sockaddr.GetInterfaceIP("eth0")
+		privateIP, err := sockaddr.GetInterfaceIP("eth0")
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get private IP")
 		}
