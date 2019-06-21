@@ -23,7 +23,7 @@ import (
 type getPrivateIPFunc func() (string, error)
 
 // This is overridden in unit tests to mock the sockaddr.GetPrivateIP function.
-var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP
+var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
 
 // calculateAdvertiseAddress attempts to clone logic from deep within memberlist
 // (NetTransport.FinalAdvertiseAddr) in order to surface its conclusions to the
