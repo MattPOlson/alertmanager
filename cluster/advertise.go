@@ -20,10 +20,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-type getPrivateIPFunc func() (string, string, error)
+//type getPrivateIPFunc func() (string, string, error)
 
 // This is overridden in unit tests to mock the sockaddr.GetPrivateIP function.
-var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
+//var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
+//var getPrivateAddress = sockaddr.GetInterfaceIP("eth0")
 
 // calculateAdvertiseAddress attempts to clone logic from deep within memberlist
 // (NetTransport.FinalAdvertiseAddr) in order to surface its conclusions to the
@@ -44,7 +45,7 @@ func calculateAdvertiseAddress(bindAddr, advertiseAddr string) (net.IP, error) {
 	}
 
 	if isAny(bindAddr) {
-		privateIP, thorwaway, err := getPrivateAddress()
+		privateIP, thowaway, err := sockaddr.GetInterfaceIP("eth0")
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get private IP")
 		}
