@@ -20,9 +20,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-//type getPrivateIPFunc func() (string, string, error)
+type getPrivateIPFunc func() string, error
+type getPrivteIPInterfaceFunc func(a string) string, error
 
 // This is overridden in unit tests to mock the sockaddr.GetPrivateIP function.
+var getPrivateAddress getPrivateIPFunc = sockaddr.GetPrivateIP
+
+var getPrivteIPInterface getPrivteIPInterfaceFunc = sockaddr.GetInterfaceIP(interfaceName string)
+
+
 //var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
 //var getPrivateAddress = sockaddr.GetInterfaceIP("eth0")
 
@@ -32,7 +38,7 @@ import (
 // inadvertently misconfigured their cluster.
 //
 // https://github.com/hashicorp/memberlist/blob/022f081/net_transport.go#L126
-func calculateAdvertiseAddress(bindAddr, advertiseAddr string) (net.IP, error) {
+func calculateAdvertiseAddress(bindAddr, advertiseAddr string, interfaceName string) (net.IP, error) {
 	if advertiseAddr != "" {
 		ip := net.ParseIP(advertiseAddr)
 		if ip == nil {
@@ -45,7 +51,7 @@ func calculateAdvertiseAddress(bindAddr, advertiseAddr string) (net.IP, error) {
 	}
 
 	if isAny(bindAddr) {
-		privateIP, err := sockaddr.GetInterfaceIP("eth0")
+		privateIP, err := sockaddr.GetInterfaceIP(interfaceName)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get private IP")
 		}
