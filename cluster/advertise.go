@@ -49,12 +49,27 @@ func calculateAdvertiseAddress(bindAddr, advertiseAddr string, interfaceName str
 		return ip, nil
 	}
 
-	if isAny(bindAddr) {
-		if interfaceName == "" {
-			privateIP := sockaddr.GetPrivateIP
-		} else {
-			privateIP, err := sockaddr.GetInterfaceIP(interfaceName)
+	if isAny(bindAddr); interfaceName != "" {
+
+		privateIP, err := sockaddr.GetInterfaceIP(interfaceName)
+
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to get private IP")
 		}
+		if privateIP == "" {
+			return nil, errors.New("no private IP found, explicit advertise addr not provided")
+		}
+		ip := net.ParseIP(privateIP)
+		if ip == nil {
+			return nil, errors.Errorf("failed to parse private IP '%s'", privateIP)
+		}
+		return ip, nil
+	}
+
+	if isAny(bindAddr); interfaceName == "" {
+
+		privateIP, err := sockaddr.GetPrivateIP()
+
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get private IP")
 		}
