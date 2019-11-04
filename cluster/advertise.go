@@ -28,7 +28,6 @@ import (
 
 //var getPrivteIPInterface getPrivteIPInterfaceFunc = sockaddr.GetInterfaceIP(interfaceName)
 
-
 //var getPrivateAddress getPrivateIPFunc = sockaddr.GetInterfaceIP("eth0")
 //var getPrivateAddress = sockaddr.GetInterfaceIP("eth0")
 
@@ -51,7 +50,11 @@ func calculateAdvertiseAddress(bindAddr, advertiseAddr string, interfaceName str
 	}
 
 	if isAny(bindAddr) {
-		privateIP, err := sockaddr.GetInterfaceIP(interfaceName)
+		if interfaceName == "" {
+			privateIP := sockaddr.GetPrivateIP
+		} else {
+			privateIP, err := sockaddr.GetInterfaceIP(interfaceName)
+		}
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to get private IP")
 		}
